@@ -22,10 +22,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import apscheduler.events
 
 import subprocess
+import platform
 import pclogging
 import traceback
 import sys
-import picamera
 
 # user defined imports
 import updateBlynk
@@ -37,7 +37,6 @@ import sendemail
 import watchDog
 import util
 from  bmp280 import BMP280
-import SkyCamera
 import os
 # Scheduler Helpers
 
@@ -218,21 +217,27 @@ except:
 # SkyCamera Setup 
 ################
 
-
-#Establish WeatherSTEMHash
-if (config.USEWEATHERSTEM == True):
-    state.WeatherSTEMHash = SkyCamera.SkyWeatherKeyGeneration(config.STATIONKEY)
-
-#Detect Camera WeatherSTEMHash
-try:
-
-    with picamera.PiCamera() as cam:
-        if (config.SWDEBUG):
-            print("Pi Camera Revision",cam.revision)
-        cam.close()
-    config.Camera_Present = True
-except:
+if (platform.machine() == 'aarch64'):
+    print("SkyCamera setup skipped.")
+    print("picamera not supported on aarch64: https://github.com/raspberrypi/Raspberry-Pi-OS-64bit/issues/86")
     config.Camera_Present = False
+else:
+    import picamera
+    import SkyCamera
+    #Establish WeatherSTEMHash
+    if (config.USEWEATHERSTEM == True):
+        state.WeatherSTEMHash = SkyCamera.SkyWeatherKeyGeneration(config.STATIONKEY)
+
+    #Detect Camera WeatherSTEMHash
+    try:
+
+        with picamera.PiCamera() as cam:
+            if (config.SWDEBUG):
+                print("Pi Camera Revision",cam.revision)
+            cam.close()
+        config.Camera_Present = True
+    except:
+        config.Camera_Present = False
 
 
 # display device present variables

@@ -29,8 +29,8 @@ LLJSON["LastMessageID"]= "N/A"
 def updateLightningLines():
 
     con = mdb.connect(
-        "localhost",
-        "root",
+        config.MySQL_Host,
+        config.MySQL_User,
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
@@ -122,8 +122,8 @@ def updateLightningLines():
 
 def build_graphLightning_figure():
     con = mdb.connect(
-        "localhost",
-        "root",
+        config.MySQL_Host,
+        config.MySQL_User,
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
@@ -175,8 +175,8 @@ def build_graphLightning_figure():
 
 def build_graph1_figure():
     con = mdb.connect(
-        "localhost",
-        "root",
+        config.MySQL_Host,
+        config.MySQL_User,
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
@@ -209,8 +209,8 @@ def build_graph1_figure():
 
 def build_graph2_figure():
     con = mdb.connect(
-        "localhost",
-        "root",
+        config.MySQL_Host,
+        config.MySQL_User,
         config.MySQL_Password,
         "WeatherSenseWireless"
     )

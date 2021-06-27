@@ -5,6 +5,8 @@ import json
 def setDefaults():
         config.SWDEBUG = False
         config.enable_MySQL_Logging = False
+        config.MySQL_Host = "localhost"
+        config.MySQL_User = "root"
         config.MySQL_Password = "password"
         config.enable_WLAN_Detection = False
         config.PingableRouterAddress = "192.168.1.1"
@@ -68,6 +70,8 @@ def readJSON(addPath):
 
                 config.SWDEBUG = getJSONValue('SWDEBUG')
                 config.enable_MySQL_Logging = getJSONValue('enable_MySQL_Logging')
+                config.MySQL_Host = getJSONValue('MySQL_Host')
+                config.MySQL_User = getJSONValue('MySQL_User')
                 config.MySQL_Password = getJSONValue('MySQL_Password')
                 config.enable_WLAN_Detection = getJSONValue('enable_WLAN_Detection')
                 config.PingableRouterAddress = getJSONValue('PingableRouterAddress')

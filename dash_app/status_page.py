@@ -48,7 +48,7 @@ def getWR2Status():
    
         try:
                 #print("trying database")
-                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather2');
+                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=30)
@@ -84,7 +84,7 @@ def getWSAQIStatus():
    
         try:
                 #print("trying database")
-                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'WeatherSenseWireless');
+                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=60)
@@ -120,7 +120,7 @@ def getWSLightningStatus():
    
         try:
                 #print("trying database")
-                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'WeatherSenseWireless');
+                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=60)
@@ -156,7 +156,7 @@ def getWSAfterShockStatus():
    
         try:
                 #print("trying database")
-                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'WeatherSenseWireless');
+                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=180)
@@ -192,7 +192,7 @@ def getWSSolarMAXStatus():
    
         try:
                 #print("trying database")
-                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'WeatherSenseWireless');
+                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=60)
@@ -227,7 +227,7 @@ def getWSSolarMAXStatus():
 def getIndoorStatus(channel):
         try:
                 #print("trying database")
-                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather2');
+                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=30)

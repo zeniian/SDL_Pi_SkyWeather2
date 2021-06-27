@@ -39,6 +39,8 @@ DustSensor_Present = True
 
 SWDEBUG = None
 enable_MySQL_Logging = None
+MySQL_Host = None
+MySQL_User = None
 MySQL_Password = None
 enable_WLAN_Detection = None
 PingableRouterAddress = None

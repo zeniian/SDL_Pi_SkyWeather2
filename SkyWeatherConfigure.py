@@ -229,6 +229,8 @@ class SkyWeatherConfigure(App):
     def setDefaults(self):
         self.SWDEBUG = False
         self.enable_MySQL_Logging = False
+        self.MySQL_Host = "localhost"
+        self.MySQL_User = "root"
         self.MySQL_Password = "password"
         self.enable_WLAN_Detection = False
         self.PingableRouterAddress = "192.168.1.1"
@@ -274,6 +276,8 @@ class SkyWeatherConfigure(App):
 
         self.dataDefaults['SWDEBUG'] = self.SWDEBUG 
         self.dataDefaults['enable_MySQL_Logging'] = self.enable_MySQL_Logging 
+        self.dataDefaults['MySQL_Host'] = self.MySQL_Host
+        self.dataDefaults['MySQL_User'] = self.MySQL_User
         self.dataDefaults['MySQL_Password'] = self.MySQL_Password 
         self.dataDefaults['enable_WLAN_Detection'] = self.enable_WLAN_Detection 
         self.dataDefaults['PingableRouterAddress'] = self.PingableRouterAddress 
@@ -336,6 +340,8 @@ class SkyWeatherConfigure(App):
 
                 self.SWDEBUG = self.getJSONValue('SWDEBUG')
                 self.enable_MySQL_Logging = self.getJSONValue('enable_MySQL_Logging')
+                self.MySQL_Host = self.getJSONValue('MySQL_Host')
+                self.MySQL_User = self.getJSONValue('MySQL_User')
                 self.MySQL_Password = self.getJSONValue('MySQL_Password')
                 self.enable_WLAN_Detection = self.getJSONValue('enable_WLAN_Detection')
                 self.PingableRouterAddress = self.getJSONValue('PingableRouterAddress')
@@ -394,6 +400,8 @@ class SkyWeatherConfigure(App):
 
         data['SWDEBUG'] = self.F_SWDEBUG.get_value()
         data['enable_MySQL_Logging'] = self.F_enable_MySQL_Logging.get_value()
+        data['MySQL_Host'] = self.F_MySQL_Host.get_value()
+        data['MySQL_User'] = self.F_MySQL_User.get_value()
         data['MySQL_Password'] = self.F_MySQL_Password.get_value()
         data['enable_WLAN_Detection'] = self.F_enable_WLAN_Detection.get_value()
         data['PingableRouterAddress'] = self.F_PingableRouterAddress.get_value()
@@ -501,6 +509,14 @@ class SkyWeatherConfigure(App):
 
         plabel = gui.Label("MySQL Password", style='position:absolute; left:5px; top:40px;'+self.labelstyle)
         vbox.append(plabel,'plabel') 
+
+        self.F_MySQL_Host = gui.TextInput(width=300, height=30, style="margin:5px")
+        self.F_MySQL_Host.set_value(self.MySQL_Host)
+        vbox.append(self.F_MySQL_Host,'MySQLHost')
+
+        self.F_MySQL_User = gui.TextInput(width=300, height=30, style="margin:5px")
+        self.F_MySQL_User.set_value(self.MySQL_User)
+        vbox.append(self.F_MySQL_User,'MySQLUser')
         
         self.F_MySQL_Password = gui.TextInput(width=300, height=30, style="margin:5px")
         self.F_MySQL_Password.set_value(self.MySQL_Password)

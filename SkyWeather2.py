@@ -79,8 +79,8 @@ if (config.enable_MySQL_Logging):
     try:
 
         con = mdb.connect(
-          "localhost",
-          "root",
+          config.MySQL_Host,
+          config.MySQL_User,
           config.MySQL_Password,
           "SkyWeather2"
           )
@@ -88,7 +88,7 @@ if (config.enable_MySQL_Logging):
     except:
         print("--------")
         print("MySQL Database SkyWeather2 Not Installed.")
-        print("Run this command:")
+        print("Run this command on your MySQL server:")
         print("sudo mysql -u root -p < SkyWeather2.sql")
         print("SkyWeather2 Stopped")
         print("--------")
@@ -100,8 +100,8 @@ if (config.enable_MySQL_Logging):
     try:
 
         con = mdb.connect(
-          "localhost",
-          "root",
+          config.MySQL_Host,
+          config.MySQL_User,
           config.MySQL_Password,
           "WeatherSenseWireless"
           )
@@ -109,7 +109,7 @@ if (config.enable_MySQL_Logging):
     except:
         print("--------")
         print("MySQL Database WeatherSenseWireless Not Installed.")
-        print("Run this command:")
+        print("Run this command on your MySQL server:")
         print("sudo mysql -u root -p < WeatherSenseWireless.sql")
         print("SkyWeather2 Stopped")
         print("--------")
@@ -119,8 +119,8 @@ if (config.enable_MySQL_Logging):
     try:
 
         con = mdb.connect(
-          "localhost",
-          "root",
+          config.MySQL_Host,
+          config.MySQL_User,
           config.MySQL_Password,
           "WeatherSenseWireless"
           )
@@ -131,7 +131,7 @@ if (config.enable_MySQL_Logging):
         #print(traceback.format_exc())
         print("--------")
         print("MySQL Database WeatherSenseWireless Updates Not Installed.")
-        print("Run this command:")
+        print("Run this command on your MySQL server:")
         print("sudo mysql -u root -p WeatherSenseWireless < updateWeatherSenseWireless.sql")
         print("SkyWeather2 Stopped")
         print("--------")

@@ -257,8 +257,8 @@ def processWeatherSenseTB(sLine):
             myTESTDescription = ""
 
             con = mdb.connect(
-                "localhost",
-                "root",
+                config.MysQL_Host,
+                config.MySQL_User,
                 config.MySQL_Password,
                 "WeatherSenseWireless"
             )
@@ -319,8 +319,8 @@ def processWeatherSenseAQI(sLine):
             myTESTDescription = ""
 
             con = mdb.connect(
-                "localhost",
-                "root",
+                config.MySQL_Host,
+                config.MySQL_User,
                 config.MySQL_Password,
                 "WeatherSenseWireless"
             )
@@ -384,8 +384,8 @@ def WSread_AQI():
         # close
         try:
             con = mdb.connect(
-                "localhost",
-                "root",
+                config.MySQL_Host,
+                config.MySQL_User,
                 config.MySQL_Password,
                 "WeatherSenseWireless"
             )
@@ -435,8 +435,8 @@ def processSolarMAX(sLine):
                 myTESTDescription = ""
 
                 con = mdb.connect(
-                    "localhost",
-                    "root",
+                    config.MySQL_Host,
+                    config.MySQL_User,
                     config.MySQL_Password,
                     "WeatherSenseWireless"
                 )
@@ -515,8 +515,8 @@ def processWeatherSenseAfterShock(sLine):
             myTESTDescription = ""
 
             con = mdb.connect(
-                    "localhost",
-                    "root",
+                    config.MySQL_Host,
+                    config.MySQL_User,
                     config.MySQL_Password,
                     "WeatherSenseWireless"
             )

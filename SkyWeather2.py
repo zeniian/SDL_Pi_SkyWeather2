@@ -73,10 +73,11 @@ def rebootPi(why):
 if (config.enable_MySQL_Logging):
     # Check for updates having been applied
     try:
-        con = utils.weatherSenseConnect()
+        con = util.weatherSenseConnect()
         cur = con.cursor()
         query = "SELECT * FROM AS433MHZ"
         cur.execute(query)
+        cur.close()
         con.close()
     except:
         #print(traceback.format_exc())

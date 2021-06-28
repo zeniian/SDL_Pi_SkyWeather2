@@ -22,6 +22,7 @@ import state
 import config
 import readJSON
 import json
+import util
 
 
 
@@ -29,7 +30,7 @@ import json
 
 readJSON.readJSON("../")
 
-import MySQLdb as mdb
+import MySQLdb
 
 
 
@@ -95,7 +96,7 @@ def fetchSystemLog():
 
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 query = "SELECT * FROM SystemLog ORDER BY ID DESC LIMIT 20" 
                 #print("query=", query)
@@ -117,7 +118,7 @@ def fetchSystemLog():
                    else:
                         Description.append(item[2])
                 return Time, Level, Description
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()

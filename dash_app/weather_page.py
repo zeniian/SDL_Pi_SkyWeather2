@@ -22,14 +22,14 @@ import state
 import config
 import readJSON
 import json
-
+import util
 
 
 # read JSON
 
 readJSON.readJSON("../")
 
-import MySQLdb as mdb
+import MySQLdb
 
 
 ################
@@ -169,12 +169,7 @@ def getWSAQIs():
         # commit
         # close
         try:
-            con = mdb.connect(
-                config.MySQL_Host,
-                config.MySQL_User,
-                config.MySQL_Password,
-                "WeatherSenseWireless"
-            )
+            con = util.weatherSenseConnect()
             cur = con.cursor()
 
             query = "SELECT timestamp, AQI, AQI24Hour FROM AQI433MHZ ORDER BY timestamp DESC LIMIT 1;"
@@ -186,10 +181,13 @@ def getWSAQIs():
             else:
                 return 0.0, 0.0
 
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
             traceback.print_exc()
             print("Error %d: %s" % (e.args[0], e.args[1]))
             # sys.exit(1)
+        finally:
+            cur.close()
+            con.close()
 
 
     return 0.0, 0.0
@@ -199,7 +197,7 @@ def getWSAQIs():
 
 def generateCurrentWeatherJSON():
         try:
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 query = "SELECT * FROM `WeatherData` ORDER BY id DESC LIMIT 1" 
                 #print("query=", query)
@@ -410,7 +408,7 @@ def generateCurrentWeatherJSON():
 def fetchWindData(timeDelta):
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 before = now - timeDelta
@@ -449,7 +447,7 @@ def fetchWindData(timeDelta):
 
 		
                 return df
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -552,7 +550,7 @@ def fetchOTH(timeDelta):
 
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 before = now - timeDelta
@@ -564,7 +562,7 @@ def fetchOTH(timeDelta):
                 records = cur.fetchall()
                 #print ("Query records=", records)
                 return records
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -668,7 +666,7 @@ def fetchAQI(timeDelta):
     if (config.USEWSAQI):
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
+                con = util.weatherSenseConnect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 before = now - timeDelta
@@ -680,7 +678,7 @@ def fetchAQI(timeDelta):
                 records = cur.fetchall()
                 #print ("Query records=", records)
                 return records
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -693,7 +691,7 @@ def fetchAQI(timeDelta):
     else:
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 before = now - timeDelta
@@ -705,7 +703,7 @@ def fetchAQI(timeDelta):
                 records = cur.fetchall()
                 #print ("Query records=", records)
                 return records
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -800,7 +798,7 @@ def fetchSUV(timeDelta):
 
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 before = now - timeDelta
@@ -812,7 +810,7 @@ def fetchSUV(timeDelta):
                 records = cur.fetchall()
                 #print ("Query records=", records)
                 return records
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()

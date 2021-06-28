@@ -23,6 +23,7 @@ import state
 import config
 import readJSON
 import json
+import util
 
 # demo mode
 useRandom = False
@@ -31,7 +32,7 @@ useRandom = False
 
 readJSON.readJSON("../")
 
-import MySQLdb as mdb
+import MySQLdb
 
 
 GREEN = "#2bff00"
@@ -48,7 +49,7 @@ def getWR2Status():
    
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=30)
@@ -64,7 +65,7 @@ def getWR2Status():
                 if (len(records) == 0):
                     return "gray"
                     
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -84,7 +85,7 @@ def getWSAQIStatus():
    
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
+                con = util.weatherSenseConnect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=60)
@@ -100,7 +101,7 @@ def getWSAQIStatus():
                 if (len(records) == 0):
                     return "gray"
                     
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -119,8 +120,8 @@ def getWSAQIStatus():
 def getWSLightningStatus():
    
         try:
-                #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
+                #print("trying database")i
+                con = util.weatherSenseConnect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=60)
@@ -136,7 +137,7 @@ def getWSLightningStatus():
                 if (len(records) == 0):
                     return "gray"
                     
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -156,7 +157,7 @@ def getWSAfterShockStatus():
    
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
+                con = util.weatherSenseConnect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=180)
@@ -172,7 +173,7 @@ def getWSAfterShockStatus():
                 if (len(records) == 0):
                     return "gray"
                     
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -191,8 +192,8 @@ def getWSAfterShockStatus():
 def getWSSolarMAXStatus():
    
         try:
-                #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'WeatherSenseWireless');
+                #print("trying database") 
+                con = util.weatherSenseConnect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=60)
@@ -208,7 +209,7 @@ def getWSSolarMAXStatus():
                 if (len(records) == 0):
                     return "gray"
                     
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -227,7 +228,7 @@ def getWSSolarMAXStatus():
 def getIndoorStatus(channel):
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 timeDelta = datetime.timedelta(minutes=30)
@@ -243,7 +244,7 @@ def getIndoorStatus(channel):
                 if (len(records) == 0):
                     return "gray"
                     
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()

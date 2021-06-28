@@ -18,20 +18,21 @@ import config
 
 import state
 import updateBlynk
-import MySQLdb as mdb
+import util
 
 import traceback
+import MySQLdb
 import WeatherUnderground
 
 def systemlog(level,  message):
 
 
- if (config.enable_MySQL_Logging == True):	
+ if (config.enable_MySQL_Logging == True):  
    LOWESTDEBUG = 0
-	# open mysql database
-	# write log
-	# commit
-	# close
+    # open mysql database
+    # write log
+    # commit
+    # close
 
    if (level >= LOWESTDEBUG):
         try:
@@ -43,12 +44,9 @@ def systemlog(level,  message):
                     if (config.USEBLYNK):
                         updateBlynk.blynkTerminalUpdate(message) 
                     pass
-                #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
-                #print("before query")
                 query = "INSERT INTO SystemLog(TimeStamp, Level, SystemText ) VALUES(LOCALTIMESTAMP(), %i, '%s')" % (level, message)
-                #print("query=%s" % query)
                 cur.execute(query)
                 con.commit()
 
@@ -69,17 +67,17 @@ def systemlog(level,  message):
 
 def readLastHour24AQI():
 
- if (config.enable_MySQL_Logging == True):	
-	# open mysql database
-	# write log
-	# commit
-	# close
+ if (config.enable_MySQL_Logging == True):  
+    # open mysql database
+    # write log
+    # commit
+    # close
         try:
 
                 # first calculate the 24 hour moving average for AQI
                 
                 print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
 
                 query = "SELECT id, AQI24Average FROM WeatherData ORDER BY id DESC Limit 1" 
@@ -93,11 +91,10 @@ def readLastHour24AQI():
 
                 #print("AQIRecords=",myAQIRecords)
 
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
-                #sys.exit(1)
 
         finally:
                 cur.close()
@@ -109,16 +106,14 @@ def readLastHour24AQI():
 import gpiozero 
 
 def get60MinuteRain():
- if (config.enable_MySQL_Logging == True):	
-	    # open mysql database
-	    # write log
-	    # commit
-	    # close
+ if (config.enable_MySQL_Logging == True):  
+        # open mysql database
+        # write log
+        # commit
+        # close
         try:
-
-           
                 
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 timeDelta = datetime.timedelta(minutes=60)
                 now = datetime.datetime.now()
@@ -135,7 +130,7 @@ def get60MinuteRain():
                 
                 return rainspan
 
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -145,16 +140,14 @@ def get60MinuteRain():
 
 
 def getCalendarDayRain():
- if (config.enable_MySQL_Logging == True):	
-	    # open mysql database
-	    # write log
-	    # commit
-	    # close
+ if (config.enable_MySQL_Logging == True):  
+        # open mysql database
+        # write log
+        # commit
+        # close
         try:
-
-           
                 
-                con = mdb.connect(config.MySQLHost, config.MySQLUser, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 # calendar day rain
                 query = "SELECT id, TotalRain, TimeStamp FROM WeatherData WHERE DATE(TimeStamp) = CURDATE() ORDER by id ASC"
@@ -166,11 +159,14 @@ def getCalendarDayRain():
                 
                 return rainspan
 
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
                 #sys.exit(1)
+        finally:
+            cur.close()
+            con.close()
 
  return 0.0 
 
@@ -180,11 +176,11 @@ def writeWeatherRecord():
  WeatherUnderground.sendWeatherUndergroundData(Rain24Hour)
  state.Rain60Minutes = get60MinuteRain()
 
- if (config.enable_MySQL_Logging == True):	
-	# open mysql database
-	# write log
-	# commit
-	# close
+ if (config.enable_MySQL_Logging == True):  
+    # open mysql database
+    # write log
+    # commit
+    # close
         try:
                 cpu = gpiozero.CPUTemperature()
                 state.CPUTemperature = cpu.temperature 
@@ -192,7 +188,7 @@ def writeWeatherRecord():
                 # first calculate the 24 hour moving average for AQI
                 
                 print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
 
                 timeDelta = datetime.timedelta(days=1)
@@ -220,7 +216,7 @@ def writeWeatherRecord():
                 #print("query=", query)
                 cur.execute(query)
                 con.commit()
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()
@@ -237,15 +233,15 @@ def writeWeatherRecord():
 
 def writeITWeatherRecord():
 
- if (config.enable_MySQL_Logging == True):	
-	# open mysql database
-	# write log
-	# commit
-	# close
+ if (config.enable_MySQL_Logging == True):  
+    # open mysql database
+    # write log
+    # commit
+    # close
         try:
 
                 print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
 
 
@@ -260,7 +256,7 @@ def writeITWeatherRecord():
                         con.commit()
                 else:
                     return
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()

@@ -17,13 +17,14 @@ import buildJSON
 import state
 import indoorTH
 import pclogging
+import util
 
 import time
 import os
 import signal
 import traceback
 
-import MySQLdb as mdb
+import MySQLdb
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #cmd = [ '/usr/local/bin/rtl_433', '-q', '-F', 'json', '-R', '146', '-R', '147']
@@ -255,13 +256,7 @@ def processWeatherSenseTB(sLine):
         try:
             myTEST = ""
             myTESTDescription = ""
-
-            con = mdb.connect(
-                config.MysQL_Host,
-                config.MySQL_User,
-                config.MySQL_Password,
-                "WeatherSenseWireless"
-            )
+            con = util.weatherSenseConnect()
 
             cur = con.cursor()
             batteryPower =  float(state["batterycurrent"])* float(state["batteryvoltage"])/1000.0
@@ -281,7 +276,7 @@ def processWeatherSenseTB(sLine):
             # print("query=", query)
             cur.execute(query)
             con.commit()
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
             traceback.print_exc()
             print("Error %d: %s" % (e.args[0], e.args[1]))
             con.rollback()
@@ -317,14 +312,7 @@ def processWeatherSenseAQI(sLine):
         try:
             myTEST = ""
             myTESTDescription = ""
-
-            con = mdb.connect(
-                config.MySQL_Host,
-                config.MySQL_User,
-                config.MySQL_Password,
-                "WeatherSenseWireless"
-            )
-
+            con = util.weatherSenseConnect()
             cur = con.cursor()
             batteryPower =  float(state["batterycurrent"])* float(state["batteryvoltage"])/1000.0
             loadPower  =  float(state["loadcurrent"])* float(state["loadvoltage"])/1000.0
@@ -359,7 +347,7 @@ def processWeatherSenseAQI(sLine):
             query = "INSERT INTO AQI433MHZ (%s) VALUES(%s )" % (fields, values)
             cur.execute(query)
             con.commit()
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
             traceback.print_exc()
             print("Error %d: %s" % (e.args[0], e.args[1]))
             con.rollback()
@@ -383,12 +371,7 @@ def WSread_AQI():
         # commit
         # close
         try:
-            con = mdb.connect(
-                config.MySQL_Host,
-                config.MySQL_User,
-                config.MySQL_Password,
-                "WeatherSenseWireless"
-            )
+            con = util.weatherSenseConnect()
             cur = con.cursor()
 
             query = "SELECT timestamp, AQI, AQI24Hour FROM AQI433MHZ ORDER BY timestamp DESC LIMIT 1;"
@@ -402,7 +385,7 @@ def WSread_AQI():
                 state.WS_AQI =  0.0
                 state.WS_Hour24_AQI = 0.0 
 
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
             traceback.print_exc()
             print("Error %d: %s" % (e.args[0], e.args[1]))
             # sys.exit(1)
@@ -433,14 +416,7 @@ def processSolarMAX(sLine):
             try:
                 myTEST = ""
                 myTESTDescription = ""
-
-                con = mdb.connect(
-                    config.MySQL_Host,
-                    config.MySQL_User,
-                    config.MySQL_Password,
-                    "WeatherSenseWireless"
-                )
-
+                con = util.weatherSenseConnect()
                 cur = con.cursor()
                 batteryPower =  float(myState["batterycurrent"])* float(myState["batteryvoltage"])/1000.0
                 loadPower  =  float(myState["loadcurrent"])* float(myState["loadvoltage"])/1000.0
@@ -475,7 +451,7 @@ def processSolarMAX(sLine):
 
 
 
-            except mdb.Error as e:
+            except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0], e.args[1]))
                 con.rollback()
@@ -513,14 +489,7 @@ def processWeatherSenseAfterShock(sLine):
         try:
             myTEST = ""
             myTESTDescription = ""
-
-            con = mdb.connect(
-                    config.MySQL_Host,
-                    config.MySQL_User,
-                    config.MySQL_Password,
-                    "WeatherSenseWireless"
-            )
-
+            con = util.weatherSenseConnect()
             cur = con.cursor()
             batteryPower =  float(state["batterycurrent"])* float(state["batteryvoltage"])
             loadPower  =  float(state["loadcurrent"])* float(state["loadvoltage"])
@@ -539,7 +508,7 @@ def processWeatherSenseAfterShock(sLine):
             # print("query=", query)
             cur.execute(query)
             con.commit()
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
             traceback.print_exc()
             print("Error %d: %s" % (e.args[0], e.args[1]))
             con.rollback()

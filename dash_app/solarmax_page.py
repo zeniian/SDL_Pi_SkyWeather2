@@ -4,7 +4,7 @@ import sys
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
-import MySQLdb as mdb
+import MySQLdb
 import datetime
 
 import plotly.graph_objs as go
@@ -12,6 +12,7 @@ import plotly.graph_objs as go
 # build the path to import config.py from the parent directory
 sys.path.append('../')
 import config
+import util
 
 # from dash.dependencies import Input, Output, MATCH, ALL, State
 
@@ -21,12 +22,7 @@ import config
 SolarMAXID = 1
 
 def build_graph1_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
+    con = util.weatherSenseConnect()
 
     # last 7 days
     timeDelta = datetime.timedelta(days=7)
@@ -56,12 +52,7 @@ def build_graph1_figure():
 
 
 def build_graph2_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
+    con = util.weatherSenseConnect()
 
     # last 7 days
     timeDelta = datetime.timedelta(days=7)

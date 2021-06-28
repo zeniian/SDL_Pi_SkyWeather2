@@ -68,64 +68,16 @@ def rebootPi(why):
    os.system("sudo shutdown -r now")
 
 
-import MySQLdb as mdb
-
 # Program Requirement Checking
 
 if (config.enable_MySQL_Logging):
-    # SkyWeather2 SQL Database
-
-    try:
-
-        con = mdb.connect(
-          config.MySQL_Host,
-          config.MySQL_User,
-          config.MySQL_Password,
-          "SkyWeather2"
-          )
-
-    except:
-        print("--------")
-        print("MySQL Database SkyWeather2 Not Installed.")
-        print("Run this command on your MySQL server:")
-        print("sudo mysql -u root -p < SkyWeather2.sql")
-        print("SkyWeather2 Stopped")
-        print("--------")
-        sys.exit("SkyWeather2 Requirements Error Exit")
-
-
-
-    # WeatherSense SQL Database
-    try:
-
-        con = mdb.connect(
-          config.MySQL_Host,
-          config.MySQL_User,
-          config.MySQL_Password,
-          "WeatherSenseWireless"
-          )
-
-    except:
-        print("--------")
-        print("MySQL Database WeatherSenseWireless Not Installed.")
-        print("Run this command on your MySQL server:")
-        print("sudo mysql -u root -p < WeatherSenseWireless.sql")
-        print("SkyWeather2 Stopped")
-        print("--------")
-        sys.exit("SkyWeather2 Requirements Error Exit")
-
     # Check for updates having been applied
     try:
-
-        con = mdb.connect(
-          config.MySQL_Host,
-          config.MySQL_User,
-          config.MySQL_Password,
-          "WeatherSenseWireless"
-          )
+        con = utils.weatherSenseConnect()
         cur = con.cursor()
         query = "SELECT * FROM AS433MHZ"
         cur.execute(query)
+        con.close()
     except:
         #print(traceback.format_exc())
         print("--------")
@@ -377,6 +329,3 @@ print ("-----------------")
 while True:
 
     time.sleep(1.0)
-
-
-

@@ -5,7 +5,6 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
-import MySQLdb as mdb
 import datetime
 
 import plotly.graph_objs as go
@@ -14,6 +13,7 @@ import plotly.graph_objs as go
 # build the path to import config.py from the parent directory
 sys.path.append('../')
 import config
+import util
 
 WSLGHTID = 1
 
@@ -28,14 +28,7 @@ ASJSON["UnitID"]= "N/A"
 ASJSON["LastMessageID"]= "N/A"
 
 def updateAfterShockLines():
-
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
-
+    con = util.weatherSenseConnect()
     cur = con.cursor()
     # build the data array
 
@@ -119,16 +112,12 @@ def updateAfterShockLines():
     else:
         ASJSON["LastMessageID"]= "N/A"
 
+    cur.close()
+    con.close()
+
 
 def build_graphAfterShock_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
-
-
+    con = util.weatherSenseConnect()
 
     #last 14 days
     timeDelta = datetime.timedelta(days=14)
@@ -162,12 +151,7 @@ def build_graphAfterShock_figure():
     return figure
 
 def build_graph1_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
+    con = util.weatherSenseConnect()
 
     #last 14 days
     timeDelta = datetime.timedelta(days=7)
@@ -196,12 +180,7 @@ def build_graph1_figure():
     return figure
 
 def build_graph2_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
+    con = util.weatherSenseConnect()
 
     #last 14 days
     timeDelta = datetime.timedelta(days=14)

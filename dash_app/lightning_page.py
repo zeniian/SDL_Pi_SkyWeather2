@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
-import MySQLdb as mdb
+import MySQLdb
 import datetime
 
 import plotly.graph_objs as go
@@ -14,6 +14,7 @@ import plotly.graph_objs as go
 sys.path.append("../")
 
 import config
+import util
 WSLGHTID = 1
 
 LLJSON={}
@@ -28,13 +29,7 @@ LLJSON["LastMessageID"]= "N/A"
 
 def updateLightningLines():
 
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
-
+    con = util.skyWeather2Connect()
     cur = con.cursor()
     # build the data array
 
@@ -42,8 +37,6 @@ def updateLightningLines():
     now = datetime.datetime.now()
     before = now - timeDelta
     before = before.strftime('%Y-%m-%d %H:%M:%S')
-
-    
     nowTime = now.strftime('%Y-%m-%d %H:%M:%S')
 
     query = "SELECT timestamp, lightningcount, deviceid from TB433MHZ WHERE (irqsource = 8) AND (deviceid = %d) ORDER BY timestamp DESC LIMIT 1 " % WSLGHTID
@@ -119,22 +112,17 @@ def updateLightningLines():
     else:
         LLJSON["LastMessageID"]= "N/A"
 
+    cur.close()
+    con.close()
+
 
 def build_graphLightning_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
-
+    con = util.skyWeather2Connect()
     #last 7 days
     timeDelta = datetime.timedelta(days=7)
     now = datetime.datetime.now()
     before = now - timeDelta
     before = before.strftime('%Y-%m-%d %H:%M:%S')
-
-    
     nowTime = now.strftime('%Y-%m-%d %H:%M:%S')
     
     query = "SELECT timestamp,deviceid, interruptcount, lightningcount, irqsource, lightninglastdistance  FROM TB433MHZ WHERE (TimeStamp > '%s') AND (irqsource = 8) AND (deviceid = %d) ORDER BY timestamp"% (before, WSLGHTID) 
@@ -174,13 +162,7 @@ def build_graphLightning_figure():
     return figure
 
 def build_graph1_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
-
+    con = util.skyWeather2Connect()  
     #last 7 days
     timeDelta = datetime.timedelta(days=7)
     now = datetime.datetime.now()
@@ -208,13 +190,7 @@ def build_graph1_figure():
     return figure
 
 def build_graph2_figure():
-    con = mdb.connect(
-        config.MySQL_Host,
-        config.MySQL_User,
-        config.MySQL_Password,
-        "WeatherSenseWireless"
-    )
-
+    con = util.skyWeather2Connect()
     #last 7 days
     timeDelta = datetime.timedelta(days=7)
     now = datetime.datetime.now()

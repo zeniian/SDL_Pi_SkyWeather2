@@ -1,3 +1,4 @@
+import MySQLdb
 
 #utility programs
 import state
@@ -8,24 +9,40 @@ import RPi.GPIO as GPIO
 import config
 
 
+def skyWeather2Connect():
+    try:
+        connect = MySQLdb.connect(config.MySQL_Host, config.MySQL_User,
+                                  config.MySQL_Password, "SkyWeather2")
+    except:
+        sys.ext("SkyWeather2 database connection failed.")
+    return connect
+
+
+def weatherSenseConnect():
+    try:
+        connect = MySQLdb.connect(config.MySQL_Host, config.MySQL_User,
+                                  config.MySQL_Password, "WeatherSenseWireless")
+    except:
+        sys.ext("WeatherSenseWireless database connection failed.")
+    return connect
+
 
 def returnStatusLine(device, state):
+    returnString = device
+    if (state == True):
+            returnString = returnString + ":   \t\tPresent"
+    else:
+            returnString = returnString + ":   \t\tNot Present"
+    return returnString
 
-        returnString = device
-        if (state == True):
-                returnString = returnString + ":   \t\tPresent"
-        else:
-                returnString = returnString + ":   \t\tNot Present"
-        return returnString
 
 def returnStatusEnable(device, state):
-
-        returnString = device
-        if (state == True):
-                returnString = returnString + ":   \t\tEnabled"
-        else:
-                returnString = returnString + ":   \t\tDisabled"
-        return returnString
+    returnString = device
+    if (state == True):
+            returnString = returnString + ":   \t\tEnabled"
+    else:
+            returnString = returnString + ":   \t\tDisabled"
+    return returnString
 
 
 

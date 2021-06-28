@@ -24,12 +24,10 @@ import readJSON
 import json
 
 
-
 # read JSON
 
 readJSON.readJSON("../")
 
-import MySQLdb as mdb
 
 
 

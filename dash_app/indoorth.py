@@ -8,6 +8,7 @@ from dash.dependencies import Input, Output
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_daq as daq
+import MySQLdb
 import plotly.express as px 
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
@@ -23,14 +24,13 @@ import state
 import config
 import readJSON
 import json
+import util
 
 
 
 # read JSON
 
 readJSON.readJSON("../")
-
-import MySQLdb as mdb
 
 
 
@@ -61,7 +61,7 @@ def generateTHData(timeDelta):
 
         try:
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Host, config.MySQL_User, config.MySQL_Password, 'SkyWeather2');
+                con = util.skyWeather2Connect()
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 before = now - timeDelta
@@ -74,7 +74,7 @@ def generateTHData(timeDelta):
                 #print ("Query records=", records)
                 print ("Query Count = ", len(records)) 
                 return records
-        except mdb.Error as e:
+        except MySQLdb.Error as e:
                 traceback.print_exc()
                 print("Error %d: %s" % (e.args[0],e.args[1]))
                 con.rollback()

@@ -536,7 +536,7 @@ def readSensors():
     #   Note that we need to either ignore output from STDERR or merge it with STDOUT due to a limitation/bug somewhere under the covers of "subprocess"
     #   > this took awhile to figure out a reliable approach for handling it...
 
-    p = Popen( cmd, stdout=PIPE, stderr=STDOUT, bufsize=1, close_fds=ON_POSIX)
+    p = Popen(cmd, stdout=PIPE, stderr=STDOUT, bufsize=1, close_fds=ON_POSIX)
     q = Queue()
 
     t = Thread(target=enqueue_output, args=('stdout', p.stdout, q))

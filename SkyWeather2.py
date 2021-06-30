@@ -292,14 +292,14 @@ scheduler.add_job(watchDog.patTheDog, 'interval', seconds=20)   # reset the Watc
 
 
 # every 5 days at 00:04, reboot
-scheduler.add_job(rebootPi, 'cron', day='5-30/5', hour=0, minute=4, args=["5 day Reboot"]) 
+#scheduler.add_job(rebootPi, 'cron', day='5-30/5', hour=0, minute=4, args=["5 day Reboot"]) 
 	
 #check for Barometric Trend (every 15 minutes)
 scheduler.add_job(util.barometricTrend, 'interval', seconds=15*60)
 
 if (config.DustSensor_Present):
     #DustSensor.read_AQI() # get current value
-    scheduler.add_job(DustSensor.read_AQI, 'interval', seconds=60*12)
+    scheduler.add_job(DustSensor.read_AQI, 'interval', seconds=60*5)
    
 if (config.USEWSAQI):
     wirelessSensors.WSread_AQI() # get current value
@@ -308,10 +308,8 @@ if (config.USEWSAQI):
 
 # weather sensors
 
-#scheduler.add_job(pclogging.writeWeatherRecord, 'interval', seconds=3*60)
-scheduler.add_job(pclogging.writeWeatherRecord, 'interval', seconds=15*60)
-
-scheduler.add_job(pclogging.writeITWeatherRecord, 'interval', seconds=15*60)
+scheduler.add_job(pclogging.writeWeatherRecord, 'interval', seconds=2*60)
+scheduler.add_job(pclogging.writeITWeatherRecord, 'interval', seconds=2*60)
 
         
 

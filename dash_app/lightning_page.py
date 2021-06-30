@@ -29,7 +29,7 @@ LLJSON["LastMessageID"]= "N/A"
 
 def updateLightningLines():
 
-    con = util.skyWeather2Connect()
+    con = util.weatherSenseConnect()
     cur = con.cursor()
     # build the data array
 

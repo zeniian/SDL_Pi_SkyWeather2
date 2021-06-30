@@ -15,6 +15,7 @@ import SDL_Pi_HM3301
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False) 
 
 import config
 

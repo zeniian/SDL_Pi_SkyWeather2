@@ -1,0 +1,15 @@
+# systemd service file for skyweather2
+[Unit]
+Description=SkyWeather2
+Requires=pigpiod.service
+After=pigpiod.service
+
+[Service]
+ExecStart=python3 /home/weather/skyweather2/main.py
+Environment=PYTHONBUFFERED=1
+Restart=on-failure
+Type=notfiy
+User=weather
+
+[Install]
+WantedBy=multi-user.target

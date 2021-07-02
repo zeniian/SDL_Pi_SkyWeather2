@@ -1,0 +1,11 @@
+# systemd service file for pigpiod
+[Unit]
+Description=piGPIOd
+
+[Service]
+ExecStart=/usr/bin/pigpiod
+Restart=on-failure
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

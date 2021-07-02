@@ -1,11 +1,11 @@
 # configuration file - DO NOT MODIFY below this line!   Defaults and configuration are read from a JSON file. SkyWeather2.JSON
-#
 
-#
+import uuid
+
+import readJSON
 
 
 SWVERSION = "001" # set in SkyWeather.py
-import uuid 
 
 # printing the value of unique MAC 
 # address using uuid and getnode() function  
@@ -80,16 +80,12 @@ MQTT_Port_Number = None
 MQTT_Send_Seconds = None
 English_Metric = None
 
-import readJSON
 
 # JSON read in files
 
 # read JSON and put it it into the config variables
 
 readJSON.readJSON('./')
-
-
-
 
 
 ########

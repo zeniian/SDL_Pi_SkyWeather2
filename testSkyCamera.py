@@ -1,20 +1,19 @@
 # imports
 # Check for user imports
 from __future__ import print_function
+
 import config
-
-import state
 import SkyCamera
+import state
 
-
-#Establish WeatherSTEMHash
+# Establish WeatherSTEMHash
 if (config.USEWEATHERSTEM == True):
-    state.WeatherSTEMHash = SkyCamera.SkyWeatherKeyGeneration(config.STATIONKEY)
+    state.WeatherSTEMHash = SkyCamera.SkyWeatherKeyGeneration(
+        config.STATIONKEY)
 
     print("config.STATIONKEY=", config.STATIONKEY)
 # test SkyWeather Camera and WeatherSTEM
-print ("taking SkyPicture")
+print("taking SkyPicture")
 SkyCamera.takeSkyPicture()
-print ("sending SkyCamera")
+print("sending SkyCamera")
 SkyCamera.sendSkyWeather()
-

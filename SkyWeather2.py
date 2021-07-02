@@ -10,6 +10,7 @@
 
 from __future__ import print_function
 
+import datetime
 import os
 import platform
 import subprocess
@@ -27,7 +28,6 @@ import pclogging
 import publishMQTT
 import sendemail
 import state
-import tasks
 import updateBlynk
 import util
 import watchDog
@@ -275,8 +275,13 @@ scheduler.add_listener(ap_my_listener, apscheduler.events.EVENT_JOB_ERROR)
 hdc1080 = None
 wiredSensors.readWiredSensors(bmp280, hdc1080)
 
+
+def tick():
+    print('Tick! The time is: %s' % datetime.now())
+
+
 # prints out the date and time to console
-scheduler.add_job(tasks.tick, 'interval', seconds=60)
+scheduler.add_job(tick, 'interval', seconds=60)
 
 # read wireless sensor package
 scheduler.add_job(wirelessSensors.readSensors)  # run in background
@@ -337,8 +342,12 @@ scheduler.print_jobs()
 print("-----------------")
 
 
+def killLogger():
+    scheduler.shutdown()
+    print("Scheduler Shutdown....")
+    exit()
+
+
 # Main Loop
-
 while True:
-
     time.sleep(1.0)

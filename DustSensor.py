@@ -3,11 +3,10 @@
 # SwithchDoc Labs September 2018
 # Public Domain
 
-
 from __future__ import print_function
 import state
 import config
-import SDL_Pi_HM3301
+
 import RPi.GPIO as GPIO
 import pigpio
 import time
@@ -16,6 +15,7 @@ import sys
 from builtins import str
 
 sys.path.append('./SDL_Pi_HM3301')
+import SDL_Pi_HM3301
 
 
 GPIO.setmode(GPIO.BCM)

@@ -8,15 +8,11 @@
 #
 
 
-from __future__ import print_function
-
 import datetime
-import os
 import platform
 import subprocess
 import sys
 import time
-import traceback
 
 import apscheduler.events
 import paho.mqtt.client as mqtt

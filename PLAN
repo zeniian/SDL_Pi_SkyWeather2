@@ -1,0 +1,47 @@
+sensors/
+  per-sensor lib/test
+    return a json obj per sensor w/data
+    return a raw data object per sensor
+
+services/
+  per-service lib
+  parse input data obj return data struct for each service
+  return succeed
+
+db.py
+  init: open db connetions
+  return per table db connection
+
+config.py
+  init: config obj
+  config json struct
+  read config file
+  write config file
+
+daemon.py
+  init: daemon obj, logger
+  return daemon context
+
+logger.py
+  init: logger obj
+  return logger object
+
+sensors.py
+  init: init each sensor, active/inactive list
+  reader: read json data from sensor
+  logger: log data to DB
+
+scheduler.py
+  init: create scheduler
+  read/log: read active sensors and log to DB
+    read thread
+    write thread
+    upload thread
+
+uploader.py
+  init: create objects for active services
+  upload w/data obj
+
+util.py
+  unit conversion functions
+  averaging 

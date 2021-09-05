@@ -1,9 +1,10 @@
+import sys
+
 import MySQLdb
 import RPi.GPIO as GPIO
 
 import config
 import state
-import updateBlynk
 
 
 def skyWeather2Connect():

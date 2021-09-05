@@ -8,15 +8,22 @@
 #
 
 
+<<<<<<< HEAD
 from __future__ import print_function
 
 import os
+=======
+import datetime
+>>>>>>> 6fd4a9e16cf48a3e99344df549d775cc5ef9fd54
 import platform
 import subprocess
 import sys
 import time
+<<<<<<< HEAD
 import traceback
 from datetime import datetime
+=======
+>>>>>>> 6fd4a9e16cf48a3e99344df549d775cc5ef9fd54
 
 import apscheduler.events
 import paho.mqtt.client as mqtt
@@ -35,7 +42,7 @@ import wiredSensors
 import wirelessSensors
 from bmp280 import BMP280
 
-config.SWVERSION = "026.3"
+config.SWVERSION = "027.0"
 
 # Scheduler Helpers
 
@@ -46,29 +53,6 @@ def ap_my_listener(event):
     if event.exception:
         print(event.exception)
         print(event.traceback)
-
-
-# helper functions
-
-
-def shutdownPi(why):
-
-    pclogging.systemlog(config.INFO, "Pi Shutting Down: %s" % why)
-    sendemail.sendEmail("test", "SkyWeather2 Shutting down:" + why,
-                        "The SkyWeather2 Raspberry Pi shutting down.", config.notifyAddress,  config.fromAddress, "")
-    sys.stdout.flush()
-    time.sleep(10.0)
-
-    os.system("sudo shutdown -h now")
-
-
-def rebootPi(why):
-
-    pclogging.systemlog(config.INFO, "Pi Rebooting: %s" % why)
-    if (config.USEBLYNK):
-        updateBlynk.blynkTerminalUpdate("Pi Rebooting: %s" % why)
-    pclogging.systemlog(config.INFO, "Pi Rebooting: %s" % why)
-    os.system("sudo shutdown -r now")
 
 
 # Program Requirement Checking
@@ -93,24 +77,6 @@ if (config.enable_MySQL_Logging):
         sys.exit("SkyWeather2 Requirements Error Exit")
 
 
-def startPigpiod():
-    if (config.SWDEBUG):
-        print("Starting pigpio daemon")
-
-    # kill all pigpio instances
-    try:
-        cmd = ['killall', 'pigpiod']
-        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-        print(output)
-        time.sleep(5)
-    except:
-        # print(traceback.format_exc())
-        pass
-
-    cmd = ['/usr/bin/pigpiod']
-    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-    print(output)
-
 
 # main program
 print("")
@@ -122,12 +88,6 @@ print("")
 print("Program Started at:" + time.strftime("%Y-%m-%d %H:%M:%S"))
 print("##########################################################")
 print("")
-
-if os.geteuid() != 0:
-    print("Make sure pigpiod is started.")
-else:
-    startPigpiod()
-
 
 # detect devices
 

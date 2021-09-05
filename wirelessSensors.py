@@ -184,7 +184,7 @@ def processF016TH(sLine):
     state.lastIndoorReading = nowStr()
 
     if (config.MQTT_Enable == True):
-        mqtt_publish_single(sLine, "F016TH")
+        mqtt_publish_single(sLine, f"F016TH/{var['channel']}")
 
     if (state.previousIndoorReading == "Never"):
         pclogging.systemlog(config.INFO, "Indoor Weather Sensor Found")

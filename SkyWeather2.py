@@ -226,7 +226,7 @@ wiredSensors.readWiredSensors(bmp280, hdc1080)
 
 
 def tick():
-    print('Tick! The time is: %s' % datetime.now())
+    print('Tick! The time is: %s' % datetime.datetime.now())
 
 
 # prints out the date and time to console

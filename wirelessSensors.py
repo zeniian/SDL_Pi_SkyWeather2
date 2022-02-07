@@ -73,6 +73,32 @@ def mqtt_publish_single(message, topic):
         print('Mosquitto not available')
 
 
+# WR2 Reading
+def addWR2Reading(WR2JSON):
+
+    if (len(state.MWR2Array) > 0):
+        # check existing records, update if found 
+        for singleChannel in state.MWR2Array:
+            if (singleChannel["id"] == WR2JSON['id']):
+                #print("update MWR2Array")
+                state.MWR2Array.remove (singleChannel)
+                state.MWR2Array.append(WR2JSON)
+                #print("-----------------")
+                #print ("state.MWR2ArrayUpdate=",state.MWR2Array)
+                #print("-----------------")
+                return
+        state.MWR2Array.append(WR2JSON)  
+        #print("-----------------")
+        #print ("state.MWR2Array=",state.MWR2Array)
+        #print("-----------------")
+
+    else:
+        state.MWR2Array.append(WR2JSON)  
+        #print("-----------------")
+        #print ("state.MWR2Array=",state.MWR2Array)
+        #print("-----------------")
+
+
 # process functions
 
 def processFT020T(sLine, lastFT020TTimeStamp, UpdateWR2):
@@ -162,7 +188,7 @@ def processFT020T(sLine, lastFT020TTimeStamp, UpdateWR2):
     #print("buildJSONSemaphore acquired")
     if (UpdateWR2):
         # now add to MWR2Array
-        WeatherRack2Array.addWR2Reading(var)
+        addWR2Reading(var)
     state.StateJSON = buildJSON.getStateJSON()
     # if (config.SWDEBUG):
     #    print("currentJSON = ", state.StateJSON)
@@ -362,31 +388,6 @@ def processWeatherSenseAQI(sLine):
             del con
 
     return
-
-
-def addWR2Reading(WR2JSON):
-
-    if (len(state.MWR2Array) > 0):
-        # check existing records, update if found 
-        for singleChannel in state.MWR2Array:
-            if (singleChannel["id"] == WR2JSON['id']):
-                #print("update MWR2Array")
-                state.MWR2Array.remove (singleChannel)
-                state.MWR2Array.append(WR2JSON)
-                #print("-----------------")
-                #print ("state.MWR2ArrayUpdate=",state.MWR2Array)
-                #print("-----------------")
-                return
-        state.MWR2Array.append(WR2JSON)  
-        #print("-----------------")
-        #print ("state.MWR2Array=",state.MWR2Array)
-        #print("-----------------")
-
-    else:
-        state.MWR2Array.append(WR2JSON)  
-        #print("-----------------")
-        #print ("state.MWR2Array=",state.MWR2Array)
-        #print("-----------------")
 
 
 def WSread_AQI():

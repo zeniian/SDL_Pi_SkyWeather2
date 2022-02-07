@@ -10,7 +10,7 @@ from threading import Thread
 # 146 = FT-020T WeatherRack2, #147 = F016TH SDL Temperature/Humidity Sensor
 print("Starting Wireless Read")
 #cmd = [ '/usr/local/bin/rtl_433', '-q', '-F', 'json', '-R', '146', '-R', '147']
-cmd = ['/usr/local/bin/rtl_433', '-q', '-F', 'json', '-R',
+cmd = ['/usr/local/bin/rtl_433', '-q', '-M', 'level', '-F', 'json', '-R',
        '146', '-R', '147', '-R', '148', '-R', '150', '-R', '151']
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------

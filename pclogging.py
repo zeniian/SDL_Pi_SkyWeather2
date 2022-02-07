@@ -1,11 +1,12 @@
 from __future__ import print_function
-import gpiozero
 
 import datetime
+import json
 import sys
 import time
 import traceback
 
+import gpiozero
 import MySQLdb
 
 # Check for user imports
@@ -14,6 +15,7 @@ import state
 import updateBlynk
 import util
 import WeatherUnderground
+import wirelessSensors
 
 #
 #
@@ -211,14 +213,33 @@ def writeWeatherRecord():
                 myAQI24 = 0.0
             state.Hour24_AQI = myAQI24
 
-            fields = "OutdoorTemperature, OutdoorHumidity, IndoorTemperature, IndoorHumidity, TotalRain, SunlightVisible, SunlightUVIndex, WindSpeed, WindGust, WindDirection,BarometricPressure, BarometricPressureSeaLevel, BarometricTemperature, AQI, AQI24Average, BatteryOK, CPUTemperature"
-            values = "%6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f,%6.2f,%6.2f,%6.2f,%6.2f,%6.2f, \'%s\',%6.2f" % (state.OutdoorTemperature, state.OutdoorHumidity, state.IndoorTemperature, state.IndoorHumidity, state.TotalRain, state.SunlightVisible,
-                                                                                                                                           state.SunlightUVIndex, state.WindSpeed, state.WindGust, state.WindDirection, state.BarometricPressure, state.BarometricPressureSeaLevel, state.BarometricTemperature, float(state.AQI), state.Hour24_AQI, state.BatteryOK, state.CPUTemperature)
-            query = "INSERT INTO WeatherData (%s) VALUES(%s )" % (
-                fields, values)
-            #print("query=", query)
-            cur.execute(query)
-            con.commit()
+
+            if (config.SWDEBUG):
+                    print("---------")
+                    print("WR2 Array length=", len(state.MWR2Array))
+                    print("---------")
+
+            for WR2JSON in state.MWR2Array:
+                # update the state to the array and write
+                #
+                if (config.SWDEBUG):
+                    print("---------")
+                    print("WR - SerialNumber=", WR2JSON["id"])
+                    print("---------")
+
+
+                textWR2JSON = json.dumps(WR2JSON)
+
+                wirelessSensors.processFT020T(textWR2JSON, "", False)
+
+
+                fields = "OutdoorTemperature, OutdoorHumidity, IndoorTemperature, IndoorHumidity, TotalRain, SunlightVisible, SunlightUVIndex, WindSpeed, WindGust, WindDirection,BarometricPressure, BarometricPressureSeaLevel, BarometricTemperature, AQI, AQI24Average, BatteryOK, CPUTemperature, SerialNumber, RSSI, SNR, NOISE"
+                values = "%6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f,%6.2f,%6.2f,%6.2f,%6.2f,%6.2f, \'%s\',%6.2f,%d, %6.2f, %6.2f, %6.2f" % (state.OutdoorTemperature, state.OutdoorHumidity, state.IndoorTemperature, state.IndoorHumidity, state.TotalRain, state.SunlightVisible, state.SunlightUVIndex, state.WindSpeed, state.WindGust, state.WindDirection,state.BarometricPressure, state.BarometricPressureSeaLevel, state.BarometricTemperature, float(state.AQI), state.Hour24_AQI, state.BatteryOK, state.CPUTemperature, state.SerialNumber, state.RSSI, state.SNR, state.NOISE)
+                query = "INSERT INTO WeatherData (%s) VALUES(%s )" % (fields, values)
+                #print("query=", query)
+                cur.execute(query)
+                con.commit()
+
         except MySQLdb.Error as e:
             traceback.print_exc()
             print("Error %d: %s" % (e.args[0], e.args[1]))

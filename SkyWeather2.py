@@ -31,7 +31,7 @@ import wiredSensors
 import wirelessSensors
 from bmp280 import BMP280
 
-config.SWVERSION = "027.0"
+config.SWVERSION = "027.3"
 
 # Scheduler Helpers
 

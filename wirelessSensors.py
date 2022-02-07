@@ -24,7 +24,7 @@ import util
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-cmd = ['/usr/local/bin/rtl_433', '-q', '-F', 'json', '-R',
+cmd = ['/usr/local/bin/rtl_433', '-q', '-M', 'level', '-F', 'json', '-R',
        '146', '-R', '147', '-R', '148', '-R', '150', '-R', '151']
 
 
@@ -75,7 +75,7 @@ def mqtt_publish_single(message, topic):
 
 # process functions
 
-def processFT020T(sLine, lastFT020TTimeStamp):
+def processFT020T(sLine, lastFT020TTimeStamp, UpdateWR2):
 
     if (config.SWDEBUG):
         sys.stdout.write("processing FT020T Data\n")
@@ -152,9 +152,17 @@ def processFT020T(sLine, lastFT020TTimeStamp):
     else:
         state.BatteryOK = "LOW"
 
+    state.SerialNumber = var['id']
+    state.RSSI = var['rssi']
+    state.SNR = var['snr']
+    state.NOISE = var['noise']
+
     #print("looking for buildJSONSemaphore acquire")
     state.buildJSONSemaphore.acquire()
     #print("buildJSONSemaphore acquired")
+    if (UpdateWR2):
+        # now add to MWR2Array
+        WeatherRack2Array.addWR2Reading(var)
     state.StateJSON = buildJSON.getStateJSON()
     # if (config.SWDEBUG):
     #    print("currentJSON = ", state.StateJSON)
@@ -354,6 +362,31 @@ def processWeatherSenseAQI(sLine):
             del con
 
     return
+
+
+def addWR2Reading(WR2JSON):
+
+    if (len(state.MWR2Array) > 0):
+        # check existing records, update if found 
+        for singleChannel in state.MWR2Array:
+            if (singleChannel["id"] == WR2JSON['id']):
+                #print("update MWR2Array")
+                state.MWR2Array.remove (singleChannel)
+                state.MWR2Array.append(WR2JSON)
+                #print("-----------------")
+                #print ("state.MWR2ArrayUpdate=",state.MWR2Array)
+                #print("-----------------")
+                return
+        state.MWR2Array.append(WR2JSON)  
+        #print("-----------------")
+        #print ("state.MWR2Array=",state.MWR2Array)
+        #print("-----------------")
+
+    else:
+        state.MWR2Array.append(WR2JSON)  
+        #print("-----------------")
+        #print ("state.MWR2Array=",state.MWR2Array)
+        #print("-----------------")
 
 
 def WSread_AQI():
@@ -599,7 +632,7 @@ def readSensors():
                     processF016TH(sLine)
                 if ((sLine.find('FT0300') != -1) or (sLine.find('FT020T') != -1)):
                     lastFT020TTimeStamp = processFT020T(
-                        sLine, lastFT020TTimeStamp)
+                        sLine, lastFT020TTimeStamp, True)
             if (sLine.find('SolarMAX') != -1):
                 processSolarMAX(sLine)
 
